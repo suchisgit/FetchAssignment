@@ -2,7 +2,7 @@
 
 ## Steps to set Up:
 
-git clone <repository-url>  <br />
+git clone "repository-url"  <br />
 cd FetchAssignment <br />
 pip install -r requirements.txt <br />
 
