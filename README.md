@@ -1,13 +1,11 @@
 # FetchAssignment
 
-Provide step-by-step instructions on how to install the project and its dependencies. You can use bullet points for clarity.
+## Steps to set Up:
 
-##Steps to set Up:
+git clone <repository-url>  <br />
+cd FetchAssignment <br />
+pip install -r requirements.txt <br />
 
-git clone <repository-url>
-cd FetchAssignment
-pip install -r requirements.txt
-
-##Executtion steps:
+## Executtion steps:
 
 python fetchHealthCheck.py input/configuration.yaml
