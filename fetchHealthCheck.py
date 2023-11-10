@@ -24,6 +24,7 @@ class HealthChecker:
         cycle = 0
         while True:
             cycle += 1
+            cycleLatency = 0
             for endpointDetails in self.endpointDetails:
                 url = endpointDetails['url']
                 method = endpointDetails.get('method', 'GET')
@@ -31,28 +32,29 @@ class HealthChecker:
                 body = endpointDetails.get('body', None)
                 try:
                     start_time = time.time()
-                    response = requests.request(method, url, headers=headers, data=body)
+                    response = requests.request(method, url, headers=headers, data=body,timeout=0.5)
                     latency = int((time.time() - start_time) * 1000)
+                    cycleLatency += latency
                     if response.status_code >= 200 and response.status_code < 300 and latency < 500:
                         outcome = 'UP'
                         self.endpointStatus[url]['up'] += 1
                     else:
                         outcome = 'DOWN'
                     self.endpointStatus[url]['total'] += 1
-
                     # print(f"Endpoint '{endpointDetails['name']}' is {outcome} ({response.status_code}, {latency} ms)")
                 except requests.RequestException as e:
                     print(f"Failed to connect to '{endpointDetails['name']}': {e}")
                     self.endpointStatus[url]['total'] += 1
-            print(f"Test Cycle {cycle}")
+            print(f"Test Cycle #{cycle}")
             self.log_endpointStatus()
-            time.sleep(15)
+            wait_time = max(0, 15 - cycleLatency / 1000)
+            time.sleep(wait_time)
 
     def log_endpointStatus(self):
         for url, stats in self.endpointStatus.items():
-            endpointStatus_percentage = (stats['up'] / stats['total']) * 100 if stats['total'] > 0 else 0
-            print(f"{url} has {int(endpointStatus_percentage)}% endpointStatus")
-        # print()
+            if stats['total'] > 0:
+                endpointStatus_percentage = (stats['up'] / stats['total']) * 100
+                print(f"{url} has {round(endpointStatus_percentage)}% availability percentage")
 
     def run(self):
         try:
