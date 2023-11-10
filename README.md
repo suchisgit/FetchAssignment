@@ -5,12 +5,13 @@ This repository is designed for implementing a program that checks the health of
 ## Prerequisites
 Ensure that latest python version is installed on the machine.<br />
 
-## Set up:
-
+## Set up
 git clone https://github.com/suchisgit/FetchAssignment.git  <br />
 cd FetchAssignment <br />
 pip install -r requirements.txt <br />
 
-## Execution command:
-
+## Execution command
 python fetchHealthCheck.py input/configuration.yaml
+
+## Demo
+![](https://github.com/suchisgit/FetchAssignment/blob/main/gif/DemoFetch.gif)
