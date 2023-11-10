@@ -11,7 +11,8 @@ cd FetchAssignment <br />
 pip install -r requirements.txt <br />
 
 ## Execution command
-python fetchHealthCheck.py input/configuration.yaml
+python fetchHealthCheck.py input/configuration.yaml <br />
+The second parameter in the command corresponds to the input file. <br />
 
 ## Demo
 ![](https://github.com/suchisgit/FetchAssignment/blob/main/gif/DemoFetch.gif)
