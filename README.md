@@ -6,12 +6,16 @@ This repository is designed for implementing a program that checks the health of
 Ensure that latest python version is installed on the machine.<br />
 
 ## Set up
-git clone https://github.com/suchisgit/FetchAssignment.git  <br />
-cd FetchAssignment <br />
-pip install -r requirements.txt <br />
+```
+git clone https://github.com/suchisgit/FetchAssignment.git 
+cd FetchAssignment 
+pip install -r requirements.txt
+```
 
 ## Execution command
-python fetchHealthCheck.py input/configuration.yaml <br />
+```
+python fetchHealthCheck.py input/configuration.yaml
+```
 The second parameter in the command corresponds to the input file. <br />
 
 ## Demo
