@@ -15,7 +15,7 @@ class HealthChecker:
             with open(config_file, 'r') as file:
                 self.endpointDetails = yaml.safe_load(file)
                 for endpointDetails in self.endpointDetails:
-                    self.endpointStatus[endpointDetails['url']] = {'up': 0, 'total': 0}
+                    self.endpointStatus[self.extract_domain(endpointDetails['url'])] = {'up': 0, 'total': 0}
         except FileNotFoundError:
             print(f"Configuration file '{config_file}' not found.")
             sys.exit(1)
@@ -27,6 +27,7 @@ class HealthChecker:
             cycleLatency = 0
             for endpointDetails in self.endpointDetails:
                 url = endpointDetails['url']
+                domain = self.extract_domain(url)
                 method = endpointDetails.get('method', 'GET')
                 headers = endpointDetails.get('headers', {})
                 body = endpointDetails.get('body', None)
@@ -37,18 +38,23 @@ class HealthChecker:
                     cycleLatency += latency
                     if response.status_code >= 200 and response.status_code < 300 and latency < 500:
                         outcome = 'UP'
-                        self.endpointStatus[url]['up'] += 1
+                        self.endpointStatus[domain]['up'] += 1
                     else:
                         outcome = 'DOWN'
-                    self.endpointStatus[url]['total'] += 1
+                    self.endpointStatus[domain]['total'] += 1
                     # print(f"Endpoint '{endpointDetails['name']}' is {outcome} ({response.status_code}, {latency} ms)")
                 except requests.RequestException as e:
                     print(f"Failed to connect to '{endpointDetails['name']}': {e}")
-                    self.endpointStatus[url]['total'] += 1
-            print(f"Test Cycle #{cycle}")
+                    self.endpointStatus[domain]['total'] += 1
             self.log_endpointStatus()
             wait_time = max(0, 15 - cycleLatency / 1000)
             time.sleep(wait_time)
+
+    def extract_domain(self,url):
+        url = url.replace("https://", "").replace("http://", "")
+        parts = url.split("/")
+        domain = parts[0]
+        return domain
 
     def log_endpointStatus(self):
         for url, stats in self.endpointStatus.items():
